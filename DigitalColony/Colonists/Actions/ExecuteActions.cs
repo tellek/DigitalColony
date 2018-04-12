@@ -7,13 +7,10 @@ namespace DigitalColony.Colonists.Actions
 {
     public class ExecuteActions
     {
-        public void PerformAction(int input, Entity entity)
+        public static void PerformAction(int input, Entity entity)
         {
             switch (input)
             {
-                case 0:
-                    // Do nothing. Rest.
-                    break;
                 case 1:
                     // Move negative on the Y axis.
                     entity.Move(Direction.Up);

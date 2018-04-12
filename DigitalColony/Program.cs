@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace DigitalColony
 {
-    public class Program
+    public static class Program
     {
         private static int xCells = 118;
         private static int yCells = 28;

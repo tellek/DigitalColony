@@ -61,6 +61,8 @@ namespace DigitalColony.BaseEntity
                         X++;
                     }
                     break;
+                default:
+                    break; // Do not move.
             }
         }
 

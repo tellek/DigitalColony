@@ -10,18 +10,16 @@ using System.Text;
 
 namespace DigitalColony.Colonists
 {
-    public partial class Colonist : Entity
+    public class Colonist : Entity
     {
         private readonly List<ActionMemory> aMem = new List<ActionMemory>();
         private readonly Predilection pTrait = new Predilection();
-        private ExecuteActions actions;
 
         public Colonist(List<Entity> WhereImAt) : base(WhereImAt)
         {
             // A new colonist is born.
             RandomizeTraits();
             Messages.PostMessage($"Jim was created with the following traits: Resting {pTrait.Resting}, Initiative {pTrait.Initiative}, Exploring {pTrait.Exploring}");
-            actions = new ExecuteActions();
         }
 
         public void Tick()
@@ -30,7 +28,7 @@ namespace DigitalColony.Colonists
             // Remember last action results.
 
             int input = DecideWhatToDo();
-            actions.PerformAction(input, this);
+            ExecuteActions.PerformAction(input, this);
 
         }
 
