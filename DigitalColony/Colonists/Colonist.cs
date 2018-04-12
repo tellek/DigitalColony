@@ -1,4 +1,6 @@
-﻿using DigitalColony.Colonists.Models.Memory;
+﻿using DigitalColony.BaseEntity;
+using DigitalColony.Colonists.Actions;
+using DigitalColony.Colonists.Models.Memory;
 using DigitalColony.Colonists.Models.Traits;
 using DigitalColony.Statics;
 using DigitalColony.Statics.UI;
@@ -8,17 +10,18 @@ using System.Text;
 
 namespace DigitalColony.Colonists
 {
-    public class Colonist : Entity
+    public partial class Colonist : Entity
     {
-        private List<ActionMemory> aMem = new List<ActionMemory>();
-        private List<LocationMemory> lMem = new List<LocationMemory>();
-        private Predilection pTrait = new Predilection();
+        private readonly List<ActionMemory> aMem = new List<ActionMemory>();
+        private readonly Predilection pTrait = new Predilection();
+        private ExecuteActions actions;
 
         public Colonist(List<Entity> WhereImAt) : base(WhereImAt)
         {
             // A new colonist is born.
             RandomizeTraits();
             Messages.PostMessage($"Jim was created with the following traits: Resting {pTrait.Resting}, Initiative {pTrait.Initiative}, Exploring {pTrait.Exploring}");
+            actions = new ExecuteActions();
         }
 
         public void Tick()
@@ -27,41 +30,8 @@ namespace DigitalColony.Colonists
             // Remember last action results.
 
             int input = DecideWhatToDo();
-            PerformAction(input);
+            actions.PerformAction(input, this);
 
-
-
-
-        }
-
-        private void PerformAction(int input)
-        {
-            switch (input)
-            {
-                case 0:
-                    // Do nothing. Rest.
-                    break;
-                case 1:
-                    // Move negative on the Y axis.
-                    Move(Direction.Up);
-                    break;
-                case 2:
-                    // Move positive on the Y axis.
-                    Move(Direction.Down);
-                    break;
-                case 3:
-                    // Move negative on the X axis.
-                    Move(Direction.Left);
-                    break;
-                case 4:
-                    // Move positive on the Y axis.
-                    Move(Direction.Right);
-                    break;
-                default:
-                    // Nothing happened with this option dislike it...
-                    break;
-
-            }
         }
 
         private int DecideWhatToDo()
@@ -70,7 +40,7 @@ namespace DigitalColony.Colonists
             if (Randomness.ShouldDo(pTrait.Initiative))
             {
                 // Try something new.
-                return Randomness.GetRandomNumber(0, 25);
+                return Randomness.GetRandomNumber(0, 5);
             }
             else
             {

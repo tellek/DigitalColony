@@ -21,8 +21,8 @@ namespace DigitalColony.Statics
         public static bool ShouldDo(int predilection)
         {
             int roll = random.Next(1, 10);
-            if (roll <= predilection) return true;
-            else return false;
+            if (roll <= predilection) { return true; }
+            else { return false; }
         }
 
         public static int GetRandomNumber(int start, int end)

@@ -1,4 +1,9 @@
-﻿using DigitalColony.Colonists;
+﻿using DigitalColony.BaseEntity;
+using DigitalColony.Colonists;
+using DigitalColony.Evironment.Scenery;
+using DigitalColony.Statics;
+using DigitalColony.Statics.UI;
+using MoreLinq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +11,7 @@ using System.Threading;
 
 namespace DigitalColony
 {
-    class Program
+    public class Program
     {
         private static int xCells = 118;
         private static int yCells = 28;
@@ -16,24 +21,14 @@ namespace DigitalColony
             Console.CursorVisible = false;
             var area = new List<Entity>();
             PlaceMountains(area);
-            var jim = new Colonist(area){ X=2, Y=2 };
-            //var kira = new Colonist(area) { X = 100, Y = 10 };
-            //var fred = new Colonist(area) { X = 75, Y = 22 };
-            //var Sue = new Colonist(area) { X = 35, Y = 18 };
+            var jim = new Colonist(area){ X=59, Y=14 };
             area.Add(jim);
-            //area.Add(kira);
-            //area.Add(fred);
-            //area.Add(Sue);
-
 
             while (true)
             {
                 // Time in ticks.
                 DrawArea(area);
                 jim.Tick();
-                //kira.Tick();
-                //fred.Tick();
-                //Sue.Tick();
 
                 Thread.Sleep(500);
             }
@@ -43,8 +38,8 @@ namespace DigitalColony
         {
             foreach (var c in area.Where(n => n.Redraw))
             {
-                if (c.GetType() == typeof(Mountain)) WriteToConsole('M', c.X, c.Y);
-                if (c.GetType() == typeof(Colonist)) WriteToConsole('C', c.X, c.Y);
+                if (c.GetType() == typeof(Mountain)) { WriteToConsole('M', c.X, c.Y); }
+                if (c.GetType() == typeof(Colonist)) { WriteToConsole('C', c.X, c.Y); }
                 c.Redraw = false;
                 if (c.Moved)
                 {
@@ -93,83 +88,17 @@ namespace DigitalColony
 
         }
     }
-
-    public class Entity
+ 
+    public class TestModel
     {
-        private List<Entity> _whereImAt { get; set; }
-
         public string Name { get; set; }
-        // Current Coordinates
-        public int X { get; set; }
-        public int Y { get; set; }
-        public bool Redraw { get; set; }
-        // Previous Coordinates
-        public int Px { get; set; }
-        public int Py { get; set; }
-        public bool Moved { get; set; }
+        public int Value { get; set; }
+        public int TempNum { get; set; }
 
-        public Entity(List<Entity> WhereImAt)
+        public TestModel(string n, int v)
         {
-            _whereImAt = WhereImAt;
-        }
-
-        public void SetPreviousCoords()
-        {
-            Px = X;
-            Py = Y;
-        }
-
-        public void Move(Direction direction)
-        {
-            switch (direction)
-            {
-                case Direction.Up:
-                    if (_whereImAt.FindIndex(f => f.Y == Y - 1 && f.X == X) == -1)
-                    {
-                        DocumentBeforeMove();
-                        Y--;
-                    }
-                    break;
-                case Direction.Down:
-                    if (_whereImAt.FindIndex(f => f.Y == Y + 1 && f.X == X) == -1)
-                    {
-                        DocumentBeforeMove();
-                        Y++;
-                    }
-                    break;
-                case Direction.Left:
-                    if (_whereImAt.FindIndex(f => f.X == X - 1 && f.Y == Y) == -1)
-                    {
-                        DocumentBeforeMove();
-                        X--;
-                    }
-                    break;
-                case Direction.Right:
-                    if (_whereImAt.FindIndex(f => f.X == X + 1 && f.Y == Y) == -1)
-                    {
-                        DocumentBeforeMove();
-                        X++;
-                    }
-                    break;
-            }
-        }
-
-        private void DocumentBeforeMove()
-        {
-            SetPreviousCoords();
-            Moved = true;
-            Redraw = true;
+            this.Name = n;
+            this.Value = v;
         }
     }
-
-    public class Mountain : Entity
-    {
-        public Mountain(List<Entity> WhereImAt) : base(WhereImAt)
-        {
-        }
-    }
-
-    
-
-    public enum Direction { Up, Down, Left, Right }
 }

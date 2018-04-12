@@ -13,10 +13,9 @@ namespace DigitalColony.Statics.UI
             Console.ForegroundColor = ConsoleColor.White;
             for (int i = text.Length; i < 119; i++)
             {
-                text = text + " ";
+                text += " ";
             }
-            text.Substring(0, 118);
-            Console.Write(text);
+            Console.Write(text.Substring(0, 118));
         }
     }
 }
